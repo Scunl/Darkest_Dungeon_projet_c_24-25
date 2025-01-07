@@ -24,8 +24,8 @@ int count_characters(Character* list);
  * Applies healing to a character
  * @param character Target character
  * @param healing Amount of healing to apply
- * @return Amount of healing actually applied
+ * @return nothing
  */
-int apply_healing(Character* character, int healing);
+void apply_healing(Character* character, int healing);
 
 #endif /* ENGINE_H */

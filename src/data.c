@@ -17,7 +17,7 @@ Accessory create_accessory(const char* name, int attack_bonus, int defense_bonus
 Character* create_character(Class classes[NBCLASS], const char* name) {
     Character* character = (Character*)malloc(sizeof(Character));
     if (!character) {
-        fprintf(stderr, "Memory allocation failed for character.\n");
+        fprintf(stderr, "Erreur d'allocation mémoire\n");
         return NULL;
     }
 

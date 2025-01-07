@@ -54,18 +54,13 @@ int count_characters(Character* list) {
     return count;
 }
 
-int apply_healing(Character* character, int healing) {
+void apply_healing(Character* character, int healing) {
     if (!character || healing < 0) {
-        return 0;
+        return;
     }
 
-    int max_hp = character->character_class.max_hp;
-    int hp_before = character->current_hp;
-    
-    character->current_hp += healing;
-    if (character->current_hp > max_hp) {
-        character->current_hp = max_hp;
-    }
-
-    return character->current_hp - hp_before; // Return actual amount healed
+    if ((character->current_hp + healing) > (character->character_class.max_hp))
+        character->current_hp = character->character_class.max_hp;
+    else
+        character->current_hp += healing;
 }
