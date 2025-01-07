@@ -1,19 +1,24 @@
-TARGET = jeu
-
 CC = gcc
+CFLAGS = -Wall -Iinclude
+SRC_DIR = src
+OBJ_DIR = obj
+INCLUDE_DIR = include
+EXEC = main
 
-CFLAGS = -Wall -g
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-SRC = main.c data.c engine.c inout.c
-OBJ = $(SRC:.c=.o)
+$(EXEC): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
 
-all: $(TARGET)
-
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) $^ -o $@
-
-%.o: %.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET) $(OBJ)
+	rm -rf $(OBJ_DIR)/*.o $(EXEC)
+
+distclean: clean
+	rm -rf $(EXEC)
+
+.PHONY: clean distclean

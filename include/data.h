@@ -5,65 +5,94 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define NBCLASS 10
+/* Constants */
+#define NBCLASS 6
 #define NBPERSOSMAX 10
+#define MAX_NAME_LENGTH 30
+
+/* Type definitions */
+typedef struct {
+    char name[MAX_NAME_LENGTH];
+    int attack;
+    int defense;
+    int max_hp;
+    int restoration;
+    int stress_resistance;
+} Class;
 
 typedef struct {
-    char name[30];
-    int att;
-    int def;
-    int HPMax;
-    int rest;
-    int str;
-} Classe;
+    char name[MAX_NAME_LENGTH];
+    int attack_bonus;
+    int defense_bonus;
+    int hp_bonus;
+    int restoration_bonus;
+    int stress_reduction;
+    int accessory_count;
+} Accessory;
 
-typedef struct Personnage {
-    char name[30];
-    int HP;
-    int Stress;
-    int nbcomb;
-    Classe classperso;
-    char accessoire1[25];
-    char accessoire2[25];
-    struct Personnage *suivant;
-} Personnage;
-
-typedef struct {
-    char nom[30];
-    int attbonus;
-    int defbonus;
-    int HPbonus;
-    int restbonus;
-    int strred;
-} Accessoire;
+typedef struct Character {
+    char name[MAX_NAME_LENGTH];
+    int current_hp;
+    int stress;
+    int combat_count;
+    Class character_class;
+    Accessory accessory1;
+    Accessory accessory2;
+    struct Character *next;
+} Character;
 
 typedef struct {
-    char nom[30];
-    int niveau;
-    int attenn;
-    int defenn;
-    int HPenn;
-    int attstrenn;
-} Ennemi;
+    char name[MAX_NAME_LENGTH];
+    int level;
+    int attack;
+    int defense;
+    int hp;
+    int stress_attack;
+} Enemy;
 
-typedef struct NoeudSanitarium {
-    Personnage personnage;
-    struct NoeudSanitarium *suivant;
-} NoeudSanitarium;
+/* Function prototypes */
+/**
+ * Allocates and initializes a new character with given class and name
+ * @param classes Array of available classes
+ * @param name Character name
+ * @return Pointer to newly allocated character or NULL if allocation fails
+ */
+Character* create_character(Class classes[NBCLASS], const char* name);
 
-typedef struct NoeudTaverne {
-    Personnage personnage;
-    struct NoeudTaverne *suivant;
-} NoeudTaverne;
+/**
+ * Removes a character from a linked list
+ * @param character_list Pointer to the list head pointer
+ * @param target Character to remove
+ * @return 1 if successful, 0 if character not found
+ */
+int remove_character(Character** character_list, Character* target);
 
-typedef struct NoeudRoulotte {
-    Accessoire accessoire;
-    int prix;
-    struct NoeudRoulotte *suivant;
-} NoeudRoulotte;
+/**
+ * Gets character at specified index in linked list
+ * @param list Head of character list
+ * @param index Index of character to retrieve (0-based)
+ * @return Pointer to character or NULL if index invalid
+ */
+Character* get_character_at_index(Character* list, int index);
 
-Personnage *allouepersonnage(Classe classes[NBCLASS], char nom[30]);
-int supprimercellule(Personnage **perso, Personnage *extraire);
-Personnage *get_personnage(Personnage *src, int id);
+/**
+ * Extracts the first character from the list
+ * @param list Pointer to the list head pointer
+ * @return Pointer to extracted character or NULL if list empty
+ */
+Character* extract_head(Character** list);
 
-#endif
+/**
+ * Creates a new accessory with specified stats
+ * @param name Accessory name
+ * @param attack_bonus Attack bonus value
+ * @param defense_bonus Defense bonus value
+ * @param hp_bonus HP bonus value
+ * @param restoration_bonus Restoration bonus value
+ * @param stress_reduction Stress reduction value
+ * @return Initialized Accessory structure
+ */
+Accessory create_accessory(const char* name, int attack_bonus, int defense_bonus,
+                          int hp_bonus, int restoration_bonus, int stress_reduction);
+
+#endif /* DATA_H */
