@@ -1,29 +1,34 @@
 #include "engine.h"
 #include "data.h"
+#include "inout.h"
+#include <time.h>
 
-int select_character(Character** source, int size, Character** destination) {
+int select_character(Character **source, int size, Character **destination) {
     int choice;
     printf("Please select a character by ID (1-%d): ", size);
-    
+
     // Input validation
     do {
         if (scanf("%d", &choice) != 1) {
-            while (getchar() != '\n'); // Clear input buffer
-            printf("Invalid input. Please enter a number between 1 and %d: ", size);
+            while (getchar() != '\n')
+                ; // Clear input buffer
+            printf("Invalid input. Please enter a number between 1 and %d: ",
+                   size);
             continue;
         }
         if (choice <= 0 || choice > size) {
-            printf("Invalid choice. Please enter a number between 1 and %d: ", size);
+            printf("Invalid choice. Please enter a number between 1 and %d: ",
+                   size);
         }
     } while (choice <= 0 || choice > size);
 
-    Character* selected = get_character_at_index(*source, choice - 1);
+    Character *selected = get_character_at_index(*source, choice - 1);
     if (!selected) {
         return 0;
     }
 
     // Create new character node
-    Character* new_char = (Character*)malloc(sizeof(Character));
+    Character *new_char = (Character *)malloc(sizeof(Character));
     if (!new_char) {
         fprintf(stderr, "Memory allocation failed.\n");
         return 0;
@@ -35,7 +40,7 @@ int select_character(Character** source, int size, Character** destination) {
     if (!*destination) {
         *destination = new_char;
     } else {
-        Character* current = *destination;
+        Character *current = *destination;
         while (current->next) {
             current = current->next;
         }
@@ -46,15 +51,15 @@ int select_character(Character** source, int size, Character** destination) {
     return remove_character(source, selected);
 }
 
-int count_characters(Character* list) {
+int count_characters(Character *list) {
     int count = 0;
-    for (Character* current = list; current; current = current->next) {
+    for (Character *current = list; current; current = current->next) {
         count++;
     }
     return count;
 }
 
-void apply_healing(Character* character, int healing) {
+void apply_healing(Character *character, int healing) {
     if (!character || healing < 0) {
         return;
     }
@@ -63,4 +68,19 @@ void apply_healing(Character* character, int healing) {
         character->current_hp = character->character_class.max_hp;
     else
         character->current_hp += healing;
+}
+
+int fight_character(Character *fighters, Enemy ennemis, int nbennemis,
+                    int choice) {
+    if (!fighters || nbennemis == 0)
+        return 0;
+    display_fight_menu(*fighters);
+    switch (choice) {
+    case 1:
+        break;
+
+    default:
+        break;
+    };
+    return 1;
 }

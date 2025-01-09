@@ -12,14 +12,13 @@ int main(void) {
     int total_characters = 0;
     int has_selection = 0;
     int choice = 0;
-
     srand(time(NULL));
 
     // Initialize classes
     Class classes[NBCLASS] = {
-        {"Fury", 13, 0, 20, 5, 7},         {"Vestal", 3, 0, 20, 15, 3},
-        {"Bounty Hunter", 7, 3, 3, 10, 8}, {"Houndmaster", 10, 6, 17, 8, 6},
-        {"Faceless", 20, 0, 15, 4, 10},    {"White Walker", 8, 0, 30, 12, 7}};
+        {"Fury", 13, 0, 20, 5, 7},          {"Vestal", 3, 0, 20, 15, 3},
+        {"Bounty Hunter", 7, 3, 25, 10, 8}, {"Houndmaster", 10, 6, 17, 8, 6},
+        {"Faceless", 20, 0, 15, 4, 10},     {"White Walker", 8, 0, 30, 12, 7}};
 
     // Initialize character names
     const char *character_names[NBPERSOSMAX] = {
@@ -30,7 +29,6 @@ int main(void) {
     Character *available_characters = NULL;
     Character *selected_deck = NULL;
     Character *sanitarium = NULL;
-    Character *fighting = NULL;
     Accessory *inventory = NULL;
 
     // Add initial 2 characters
@@ -39,7 +37,7 @@ int main(void) {
     total_characters++;
     selected_characters++;
     available_characters->next =
-        create_character(classes, character_names[total_characters]);
+        create_character(classes + 1, character_names[total_characters]);
     total_characters++;
     selected_characters++;
 
@@ -57,8 +55,9 @@ int main(void) {
                 while (current->next) {
                     current = current->next;
                 }
-                current->next = create_character(
-                    classes, character_names[total_characters]);
+                current->next =
+                    create_character(classes + (total_characters % NBCLASS),
+                                     character_names[total_characters]);
             }
             total_characters++;
             selected_characters++;
@@ -122,63 +121,61 @@ int main(void) {
         } break;
 
         case 5:
-            if (!sanitarium) {
-                printf("\nNo characters available for selection! Send at least "
-                       "one character to sanitarium.\n");
-                break;
-            }
-            printf("\nSelect your character:\n");
-            display_characters(sanitarium);
-            if (select_character(&sanitarium,
-                                 total_characters - selected_characters,
-                                 &selected_deck)) {
-                round_number++;
-                selected_characters--;
-            }
-            break;
-
-        case 6:
-            int fighter_size = count_characters(fighting);
-            int deck_size = count_characters(selected_deck);
-
-            if (deck_size == 0) {
-                printf("No one is ready to fight\n Select at least one champion\n");
-                break;
-            }
-            printf("\nSelect your character:\n");
-            display_characters(selected_deck);
-            if ((fighter_size == 0) &&
-                (select_character(&selected_deck, 1,
-                                  &fighting))) {
-                printf("You are fighting with this champion : \n");
-                display_characters(fighting);
-            }
-
-        case 7:
-            if (!fighting) {
-                printf("No one is inside the arena ready to fight\n");
-                break;
-            }
-            break;
-
-        case 8:
-            if (!fighting) {
-                printf("No one is inside the arena ready to fight\n");
-                break;
-            }
-            display_characters(fighting);
-            printf("\nSelect your character:\n");
-            if (select_character(&fighting, count_characters(fighting), &selected_deck))
-                printf("Succesfully moved into your deck\n");
-            break;
-            
-        case 9:
             round_number++;
             printf("\nMoving to round %d...\n", round_number);
             break;
 
+        case 6: { // Commencer un combat
+            if (!selected_deck) {
+                printf("Vous devez sélectionner au moins un personnage pour "
+                       "commencer un combat !\n");
+                break;
+            }
+
+            // Initialiser un ennemi pour ce round
+            Enemy enemy = {
+                "Ennemi",         round_number + 1,      3 + 2 * round_number,
+                1 + round_number, 20 + 5 * round_number, 5 + round_number};
+            printf("\nCombat contre :\n");
+            display_enemy_status(&enemy);
+
+            // Boucle de combat
+            while (enemy.hp > 0 && count_characters(selected_deck) > 0) {
+                printf("\n--- Tour du joueur ---\n");
+                Character *current = selected_deck;
+                while (current) {
+                    display_character_status(current);
+                    handle_player_turn(current, &enemy);
+
+                    if (enemy.hp <= 0) {
+                        printf("Vous avez vaincu l'ennemi !\n");
+                        break;
+                    }
+                    current = current->next;
+                }
+
+                if (enemy.hp > 0) {
+                    printf("\n--- Tour de l'ennemi ---\n");
+                    handle_enemy_turn(&enemy, &selected_deck,
+                                      count_characters(selected_deck));
+                    remove_dead_characters(
+                        &selected_deck); // Supprimez les personnages morts
+                }
+            }
+
+            if (enemy.hp <= 0) {
+                printf("Félicitations ! Vous avez remporté le combat du round "
+                       "%d !\n",
+                       round_number);
+            } else {
+                printf("Vous avez perdu le combat...\n");
+            }
+
+            break;
+        }
+
         default:
-            printf("Invalid choice. Please select 1-5.\n");
+            printf("Invalid choice. Please select 1-6.\n");
             break;
         }
 
@@ -187,7 +184,7 @@ int main(void) {
         }
 
         // Check game ending conditions
-        if (has_selection && !selected_deck && !fighting) {
+        if (has_selection && !selected_deck) {
             game_running = 0;
             printf("Game Over: No characters remaining.\n");
         }

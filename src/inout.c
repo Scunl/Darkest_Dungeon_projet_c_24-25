@@ -71,9 +71,13 @@ void display_menu(int round_number) {
     printf("2. View deck\n");
     printf("3. Check accessories\n");
     printf("4. Send characters to sanitarium\n");
-    printf("5. Next round\n");
+    printf("5. Send characters from sanitarium to deck\n");
+    printf("6. Send characters to the arena (Preparing fight...) !\n");
+    printf("7. Ready to fight\n");
+    printf("8. Remove characters from arena\n");
+    printf("9. Next round\n");
     printf("====================================================\n");
-    printf("Enter your choice (1-5): ");
+    printf("Enter your choice (1-9): ");
 }
 
 void display_character_status(const Character* character) {
@@ -95,4 +99,11 @@ void display_character_status(const Character* character) {
         printf("Accessory 2: %s\n", character->accessory2.name);
     }
     printf("=====================\n\n");
+}
+
+void display_fight_menu(Character champion) {
+    printf("1. Attack the ennemi with %d dammage point\n", champion.character_class.attack);
+    printf("2. Defend your champion and reduce %d dammage from ennemies attack\n", champion.character_class.defense);
+    printf("3. Restore your champion health whit %dHP\n", champion.character_class.restoration);
+
 }
