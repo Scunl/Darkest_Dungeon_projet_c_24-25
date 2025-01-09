@@ -9,6 +9,7 @@
  */
 void display_characters(const Character* characters);
 
+void display_enemies(Enemy* enemies);
 /**
  * Displays available character classes
  * @param classes Array of available classes

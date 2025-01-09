@@ -23,16 +23,42 @@ int main(void) {
 
     // Initialize character names
     const char *character_names[NBPERSOSMAX] = {
-        "Arthur", "Merlin",   "Luna",   "Gwen",   "Jon Snow",
-        "Arya",   "Daenerys", "Tyrion", "Cersei", "Jaime"};
-
+        "Arthur", "Merlin",   "Luna",   "Gwen",    "Jon Snow",
+        "Arya",   "Daenerys", "Tyrion", "Podrick", "Jaime"};
+    const char *enemyNames[] = {
+        "Eternal Frost",     "The Mountain",     "Wight",
+        "Direwolf",          "Dragon",           "Night King",
+        "Unsullied Soldier", "Cersei Lannister", "Wildling Raider",
+        "The Hound"};
+    int enemyStats[10][5] = {{1, 3, 3, 9, 0},      {2, 6, 4, 13, 10},
+                             {3, 8, 8, 16, 20},    {4, 12, 10, 22, 30},
+                             {5, 15, 12, 30, 40},  {6, 18, 15, 40, 50},
+                             {7, 20, 18, 50, 60},  {8, 25, 20, 65, 80},
+                             {9, 30, 22, 75, 100}, {10, 35, 25, 90, 120}};
     // Initialize pointers for character lists
     Character *available_characters = NULL;
     Character *selected_deck = NULL;
     Character *sanitarium = NULL;
     Character *fighting = NULL;
     Accessory *inventory = NULL;
+    Enemy *enemies = NULL;
 
+    // Init every ennemies
+    Enemy *current = NULL;
+    for (int i = 0; i < 10; i++) {
+        Enemy *new_enemy =
+            createEnemy(enemyNames[i], enemyStats[i][0], enemyStats[i][1],
+                        enemyStats[i][2], enemyStats[i][3], enemyStats[i][4]);
+
+        if (enemies == NULL) {
+            enemies = new_enemy;
+        } else {
+            current->next = new_enemy;
+        }
+        current = new_enemy;
+    }
+
+    display_enemies(enemies);
     // Add initial 2 characters
     available_characters =
         create_character(classes, character_names[total_characters]);
@@ -142,14 +168,14 @@ int main(void) {
             int deck_size = count_characters(selected_deck);
 
             if (deck_size == 0) {
-                printf("No one is ready to fight\n Select at least one champion\n");
+                printf("No one is ready to fight\n Select at least one "
+                       "champion\n");
                 break;
             }
             printf("\nSelect your character:\n");
             display_characters(selected_deck);
             if ((fighter_size == 0) &&
-                (select_character(&selected_deck, 1,
-                                  &fighting))) {
+                (select_character(&selected_deck, 1, &fighting))) {
                 printf("You are fighting with this champion : \n");
                 display_characters(fighting);
             }
@@ -159,6 +185,7 @@ int main(void) {
                 printf("No one is inside the arena ready to fight\n");
                 break;
             }
+            fight_character(fighting, enemies, 10);
             break;
 
         case 8:
@@ -168,10 +195,11 @@ int main(void) {
             }
             display_characters(fighting);
             printf("\nSelect your character:\n");
-            if (select_character(&fighting, count_characters(fighting), &selected_deck))
+            if (select_character(&fighting, count_characters(fighting),
+                                 &selected_deck))
                 printf("Succesfully moved into your deck\n");
             break;
-            
+
         case 9:
             round_number++;
             printf("\nMoving to round %d...\n", round_number);

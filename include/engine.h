@@ -3,6 +3,8 @@
 
 #include "data.h"
 
+Enemy *createEnemy(const char name[MAX_NAME_LENGTH], int level, int attack,
+                   int defense, int hp, int stress);
 /* Function prototypes */
 /**
  * Selects a character from source list and moves it to destination list
@@ -11,14 +13,14 @@
  * @param destination Pointer to destination character list
  * @return 1 if successful, 0 if failed
  */
-int select_character(Character** source, int size, Character** destination);
+int select_character(Character **source, int size, Character **destination);
 
 /**
  * Counts the number of characters in a list
  * @param list Head of character list
  * @return Number of characters in the list
  */
-int count_characters(Character* list);
+int count_characters(Character *list);
 
 /**
  * Applies healing to a character
@@ -26,6 +28,6 @@ int count_characters(Character* list);
  * @param healing Amount of healing to apply
  * @return nothing
  */
-void apply_healing(Character* character, int healing);
-
+void apply_healing(Character *character, int healing);
+int fight_character(Character *fighters, Enemy ennemis[], int nbennemis);
 #endif /* ENGINE_H */

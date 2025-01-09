@@ -3,6 +3,23 @@
 #include "inout.h"
 #include <time.h>
 
+Enemy* createEnemy(const char name[MAX_NAME_LENGTH], int level, int attack, int defense, int hp, int stress) {
+    Enemy *champion = (Enemy *)malloc(sizeof(Enemy));
+    if (!champion)
+        return champion;
+    strncpy(champion->name, name, MAX_NAME_LENGTH - 1);
+    champion->name[MAX_NAME_LENGTH - 1] = '\0';
+
+    champion->level = level;
+    champion->attack = attack;
+    champion->defense = defense;
+    champion->hp = hp;
+    champion->stress_attack = stress;
+    champion->next = NULL;
+
+    return champion;
+}
+
 int select_character(Character **source, int size, Character **destination) {
     int choice;
     printf("Please select a character by ID (1-%d): ", size);
@@ -70,11 +87,18 @@ void apply_healing(Character *character, int healing) {
         character->current_hp += healing;
 }
 
-int fight_character(Character *fighters, Enemy ennemis, int nbennemis,
-                    int choice) {
+int fight_character(Character *fighters, Enemy ennemis[], int nbennemis) {
     if (!fighters || nbennemis == 0)
         return 0;
-    display_fight_menu(*fighters);
+    int choice;
+
+    Character champ_selected;
+
+    display_characters(fighters);
+    scanf("%d", &choice);
+    champ_selected = *get_character_at_index(fighters, choice);
+    display_fight_menu(champ_selected);
+    scanf("%d", &choice);
     switch (choice) {
     case 1:
         break;

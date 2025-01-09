@@ -10,6 +10,7 @@
 #define NBPERSOSMAX 10
 #define MAX_NAME_LENGTH 30
 
+
 /* Type definitions */
 typedef struct {
     char name[MAX_NAME_LENGTH];
@@ -41,13 +42,14 @@ typedef struct Character {
     struct Character *next;
 } Character;
 
-typedef struct {
+typedef struct Enemy {
     char name[MAX_NAME_LENGTH];
     int level;
     int attack;
     int defense;
     int hp;
     int stress_attack;
+    struct Enemy *next;
 } Enemy;
 
 /* Function prototypes */
@@ -57,7 +59,7 @@ typedef struct {
  * @param name Character name
  * @return Pointer to newly allocated character or NULL if allocation fails
  */
-Character* create_character(Class classes[NBCLASS], const char* name);
+Character *create_character(Class classes[NBCLASS], const char *name);
 
 /**
  * Removes a character from a linked list
@@ -65,7 +67,7 @@ Character* create_character(Class classes[NBCLASS], const char* name);
  * @param target Character to remove
  * @return 1 if successful, 0 if character not found
  */
-int remove_character(Character** character_list, Character* target);
+int remove_character(Character **character_list, Character *target);
 
 /**
  * Gets character at specified index in linked list
@@ -73,14 +75,14 @@ int remove_character(Character** character_list, Character* target);
  * @param index Index of character to retrieve (0-based)
  * @return Pointer to character or NULL if index invalid
  */
-Character* get_character_at_index(Character* list, int index);
+Character *get_character_at_index(Character *list, int index);
 
 /**
  * Extracts the first character from the list
  * @param list Pointer to the list head pointer
  * @return Pointer to extracted character or NULL if list empty
  */
-Character* extract_head(Character** list);
+Character *extract_head(Character **list);
 
 /**
  * Creates a new accessory with specified stats
@@ -92,7 +94,8 @@ Character* extract_head(Character** list);
  * @param stress_reduction Stress reduction value
  * @return Initialized Accessory structure
  */
-Accessory create_accessory(const char* name, int attack_bonus, int defense_bonus,
-                          int hp_bonus, int restoration_bonus, int stress_reduction);
+Accessory create_accessory(const char *name, int attack_bonus,
+                           int defense_bonus, int hp_bonus,
+                           int restoration_bonus, int stress_reduction);
 
 #endif /* DATA_H */
