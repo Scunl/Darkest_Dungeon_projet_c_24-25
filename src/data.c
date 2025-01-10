@@ -1,7 +1,8 @@
 #include "data.h"
 
-Accessory create_accessory(const char* name, int attack_bonus, int defense_bonus,
-                          int hp_bonus, int restoration_bonus, int stress_reduction) {
+Accessory create_accessory(const char *name, int attack_bonus,
+                           int defense_bonus, int hp_bonus,
+                           int restoration_bonus, int stress_reduction) {
     Accessory accessory;
     strncpy(accessory.name, name, MAX_NAME_LENGTH - 1);
     accessory.name[MAX_NAME_LENGTH - 1] = '\0';
@@ -14,8 +15,8 @@ Accessory create_accessory(const char* name, int attack_bonus, int defense_bonus
     return accessory;
 }
 
-Character* create_character(Class classes[NBCLASS], const char* name) {
-    Character* character = (Character*)malloc(sizeof(Character));
+Character *create_character(Class classes[NBCLASS], const char *name) {
+    Character *character = (Character *)malloc(sizeof(Character));
     if (!character) {
         fprintf(stderr, "Erreur d'allocation mémoire\n");
         return NULL;
@@ -33,20 +34,20 @@ Character* create_character(Class classes[NBCLASS], const char* name) {
     character->next = NULL;
 
     // Initialize with empty accessories
-    
+
     character->accessory1 = create_accessory("", 0, 0, 0, 0, 0);
     character->accessory2 = create_accessory("", 0, 0, 0, 0, 0);
 
     return character;
 }
 
-int remove_character(Character** character_list, Character* target) {
+int remove_character(Character **character_list, Character *target) {
     if (!character_list || !*character_list || !target) {
         return 0;
     }
 
-    Character* current = *character_list;
-    Character* prev = NULL;
+    Character *current = *character_list;
+    Character *prev = NULL;
 
     while (current) {
         if (current == target) {
@@ -65,24 +66,24 @@ int remove_character(Character** character_list, Character* target) {
     return 0;
 }
 
-Character* get_character_at_index(Character* list, int index) {
+Character *get_character_at_index(Character *champion, int index) {
     if (index < 0) {
         return NULL;
     }
 
-    Character* current = list;
-    for (int i = 0; i < index && current; i++) {
+    Character *current = champion;
+    for (int i = 0; i < (index - 1) && current; i++) {
         current = current->next;
     }
     return current;
 }
 
-Character* extract_head(Character** list) {
+Character *extract_head(Character **list) {
     if (!list || !*list) {
         return NULL;
     }
-    
-    Character* head = *list;
+
+    Character *head = *list;
     *list = (*list)->next;
     head->next = NULL;
     return head;

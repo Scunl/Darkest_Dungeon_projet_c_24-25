@@ -10,7 +10,6 @@
 #define NBPERSOSMAX 10
 #define MAX_NAME_LENGTH 30
 
-
 /* Type definitions */
 typedef struct {
     char name[MAX_NAME_LENGTH];
@@ -75,7 +74,7 @@ int remove_character(Character **character_list, Character *target);
  * @param index Index of character to retrieve (0-based)
  * @return Pointer to character or NULL if index invalid
  */
-Character *get_character_at_index(Character *list, int index);
+Character *get_character_at_index(Character *champion, int index);
 
 /**
  * Extracts the first character from the list

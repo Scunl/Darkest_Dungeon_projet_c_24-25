@@ -119,6 +119,8 @@ int main(void) {
             display_characters(selected_deck);
             printf("    SANITARIUM   ");
             display_characters(sanitarium);
+            printf("    FIGHTERS   \n");
+            display_characters(fighting);
             break;
 
         case 3:
@@ -172,20 +174,24 @@ int main(void) {
                        "champion\n");
                 break;
             }
-            printf("\nSelect your character:\n");
-            display_characters(selected_deck);
-            if ((fighter_size == 0) &&
-                (select_character(&selected_deck, 1, &fighting))) {
-                printf("You are fighting with this champion : \n");
+            
+            if (fighter_size < 3) {
+                display_characters(selected_deck);
+                if (select_character(&selected_deck, deck_size, &fighting)) {
+                    printf("You are fighting with this champion : \n");
+                }
+            } else {
+                printf("\nYou already have 3 champions inside the arena\n");
                 display_characters(fighting);
             }
+            break;
 
         case 7:
             if (!fighting) {
                 printf("No one is inside the arena ready to fight\n");
                 break;
             }
-            fight_character(fighting, enemies, 10);
+            fight_character(fighting, &enemies, enemies, 10);
             break;
 
         case 8:
@@ -203,6 +209,10 @@ int main(void) {
         case 9:
             round_number++;
             printf("\nMoving to round %d...\n", round_number);
+            break;
+        
+        case 10:
+            display_enemies(enemies);
             break;
 
         default:

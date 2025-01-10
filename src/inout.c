@@ -88,9 +88,11 @@ void display_menu(int round_number) {
     printf("7. Ready to fight\n");
     printf("8. Remove characters from arena\n");
     printf("9. Next round\n");
+    printf("10. Show every enemies\n");
     printf("====================================================\n");
-    printf("Enter your choice (1-9): ");
+    printf("Enter your choice (1-10): ");
 }
+
 
 void display_character_status(const Character *character) {
     if (!character) {
@@ -117,9 +119,9 @@ void display_character_status(const Character *character) {
 void display_fight_menu(Character champion) {
     printf("1. Attack the ennemi with %d dammage point\n",
            champion.character_class.attack);
-    printf(
-        "2. Defend your champion and reduce %d dammage from ennemies attack\n",
-        champion.character_class.defense);
+    printf("2. Defend your champion and reduce %d dammage from ennemies "
+           "attack\n",
+           champion.character_class.defense);
     printf("3. Restore your champion health whit %dHP\n",
            champion.character_class.restoration);
 }

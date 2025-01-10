@@ -29,5 +29,9 @@ int count_characters(Character *list);
  * @return nothing
  */
 void apply_healing(Character *character, int healing);
-int fight_character(Character *fighters, Enemy ennemis[], int nbennemis);
+void fighters_attack_enemy(Character *fighter, Enemy **opponents,
+                           Enemy *target);
+int fight_character(Character *fighters, Enemy **ennemis, Enemy *target,
+                    int nbennemis);
+
 #endif /* ENGINE_H */

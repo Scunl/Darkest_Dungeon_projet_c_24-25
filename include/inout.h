@@ -34,7 +34,8 @@ void display_menu(int round_number);
  * @param character Character whose status to display
  */
 void display_character_status(const Character* character);
-
 void display_enemy_status(Enemy *enemy);
 void display_fight_menu(Character champion);
+
+
 #endif
