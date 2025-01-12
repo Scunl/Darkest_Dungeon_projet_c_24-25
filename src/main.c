@@ -160,7 +160,6 @@ int main(void) {
             if (select_character(&sanitarium,
                                  total_characters - selected_characters,
                                  &selected_deck)) {
-                round_number++;
                 selected_characters--;
             }
             break;
@@ -192,6 +191,7 @@ int main(void) {
                 break;
             }
             fight_character(fighting, &enemies, enemies, 10);
+            round_number++;
             break;
 
         case 8:
@@ -225,7 +225,7 @@ int main(void) {
         }
 
         // Check game ending conditions
-        if (has_selection && !selected_deck && !fighting) {
+        if ((has_selection && !selected_deck && !fighting) || (!enemies)) {
             game_running = 0;
             printf("Game Over: No characters remaining.\n");
         }

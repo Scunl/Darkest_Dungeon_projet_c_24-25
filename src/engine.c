@@ -3,24 +3,6 @@
 #include "inout.h"
 #include <time.h>
 
-Enemy *createEnemy(const char name[MAX_NAME_LENGTH], int level, int attack,
-                   int defense, int hp, int stress) {
-    Enemy *champion = (Enemy *)malloc(sizeof(Enemy));
-    if (!champion)
-        return champion;
-    strncpy(champion->name, name, MAX_NAME_LENGTH - 1);
-    champion->name[MAX_NAME_LENGTH - 1] = '\0';
-
-    champion->level = level;
-    champion->attack = attack;
-    champion->defense = defense;
-    champion->hp = hp;
-    champion->stress_attack = stress;
-    champion->next = NULL;
-
-    return champion;
-}
-
 int select_character(Character **source, int size, Character **destination) {
     int choice;
     printf("Please select a character by ID (1-%d): ", size);
@@ -82,32 +64,16 @@ void apply_healing(Character *character, int healing) {
         return;
     }
 
-    if ((character->current_hp + healing) > (character->character_class.max_hp))
+    if ((character->current_hp + healing) >
+        (character->character_class.max_hp)) {
         character->current_hp = character->character_class.max_hp;
-    else
+        printf("Restoring %d HP for %s !\n  Your champiion is now full life\n",
+               character->current_hp, character->name);
+    } else {
         character->current_hp += healing;
-}
-
-int delete_enemy(Enemy **opponents, Enemy *target) {
-    if (!opponents || !target)
-        return 0;
-
-    Enemy *current = *opponents;
-    Enemy *prev = NULL;
-
-    for (; current; current = current->next) {
-        if (current == target) {
-            if (prev) {
-                prev->next = current->next;
-            } else {
-                *opponents = current->next;
-            }
-            free(current);
-            return 1;
-        }
-        prev = current;
+        printf("Restoring %d HP for %s !\n  You have now %d HP\n", healing,
+               character->name, character->current_hp);
     }
-    return 0;
 }
 
 void fighters_attack_enemy(Character *fighter, Enemy **opponents,
@@ -124,7 +90,7 @@ void fighters_attack_enemy(Character *fighter, Enemy **opponents,
     }
 }
 
-int fight_character(Character *fighters, Enemy **ennemis, Enemy *target,
+int fight_character(Character *fighters, Enemy **enemis, Enemy *target,
                     int nbennemis) {
     if (!fighters || nbennemis == 0)
         return 0;
@@ -136,18 +102,23 @@ int fight_character(Character *fighters, Enemy **ennemis, Enemy *target,
         Character *current = get_character_at_index(fighters, i);
         printf("It's %s turn, which attack do you want to use ?\n",
                current->name);
-        display_fight_menu(*fighters);
+        display_fight_menu(*current);
         scanf("%d", &choice);
 
         switch (choice) {
         case 1:
-            fighters_attack_enemy(current, ennemis, target);
+            fighters_attack_enemy(current, enemis, target);
             break;
         case 2:
+            current->defending = 1;
+            printf("You are protect your champion with %d damage from the next "
+                   "enemies attack", current->character_class.defense);
             break;
         case 3:
+            apply_healing(current, current->character_class.restoration);
             break;
         default:
+            printf("Selected invalid input\n");
             break;
         };
     }

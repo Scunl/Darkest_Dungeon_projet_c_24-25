@@ -1,22 +1,22 @@
 #include "inout.h"
 
 void display_characters(const Character *characters) {
-    printf("\n%-4s %-25s %-20s %-10s %-10s %-10s %-10s %-10s %-10s\n", "ID",
+    printf("\n%-4s %-25s %-20s %-10s %-10s %-10s %-10s %-10s %-15s %-10s\n", "ID",
            "Character Name", "Class", "Attack", "Defense", "Max HP",
-           "Current HP", "Stress", "Restoration");
+           "Current HP", "Stress", "Restoration", "Defending");
     printf("-------------------------------------------------------------------"
-           "-------------"
+           "--------------------------"
            "----------------------------------------\n");
 
     int id = 1;
     for (const Character *current = characters; current;
          current = current->next, id++) {
-        printf("%-4d %-25s %-20s %-10d %-10d %-10d %-10d %-10d %-10d\n", id,
+        printf("%-4d %-25s %-20s %-10d %-10d %-10d %-10d %-10d %-15d %-10s\n", id,
                current->name, current->character_class.name,
                current->character_class.attack,
                current->character_class.defense,
                current->character_class.max_hp, current->current_hp,
-               current->stress, current->character_class.restoration);
+               current->stress, current->character_class.restoration, (current->defending ? "Yes" : "No"));
     }
     printf("\n");
 }
@@ -122,6 +122,6 @@ void display_fight_menu(Character champion) {
     printf("2. Defend your champion and reduce %d dammage from ennemies "
            "attack\n",
            champion.character_class.defense);
-    printf("3. Restore your champion health whit %dHP\n",
+    printf("3. Restore your champion health with %dHP\n",
            champion.character_class.restoration);
 }

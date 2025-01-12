@@ -3,8 +3,7 @@
 
 #include "data.h"
 
-Enemy *createEnemy(const char name[MAX_NAME_LENGTH], int level, int attack,
-                   int defense, int hp, int stress);
+
 /* Function prototypes */
 /**
  * Selects a character from source list and moves it to destination list
@@ -31,7 +30,7 @@ int count_characters(Character *list);
 void apply_healing(Character *character, int healing);
 void fighters_attack_enemy(Character *fighter, Enemy **opponents,
                            Enemy *target);
-int fight_character(Character *fighters, Enemy **ennemis, Enemy *target,
+int fight_character(Character *fighters, Enemy **enemis, Enemy *target,
                     int nbennemis);
 
 #endif /* ENGINE_H */

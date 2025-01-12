@@ -35,6 +35,8 @@ typedef struct Character {
     int current_hp;
     int stress;
     int combat_count;
+    int defending; // Is the champion defending himself for the next round ? 0
+                   // If no, 1 if yes.
     Class character_class;
     Accessory accessory1;
     Accessory accessory2;
@@ -59,6 +61,9 @@ typedef struct Enemy {
  * @return Pointer to newly allocated character or NULL if allocation fails
  */
 Character *create_character(Class classes[NBCLASS], const char *name);
+
+Enemy *createEnemy(const char name[MAX_NAME_LENGTH], int level, int attack,
+                   int defense, int hp, int stress);
 
 /**
  * Removes a character from a linked list
@@ -96,5 +101,7 @@ Character *extract_head(Character **list);
 Accessory create_accessory(const char *name, int attack_bonus,
                            int defense_bonus, int hp_bonus,
                            int restoration_bonus, int stress_reduction);
+
+int delete_enemy(Enemy **opponents, Enemy *target);
 
 #endif /* DATA_H */

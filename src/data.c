@@ -32,6 +32,7 @@ Character *create_character(Class classes[NBCLASS], const char *name) {
     character->combat_count = 0;
     character->character_class = chosen_class;
     character->next = NULL;
+    character->defending = 0;
 
     // Initialize with empty accessories
 
@@ -87,4 +88,45 @@ Character *extract_head(Character **list) {
     *list = (*list)->next;
     head->next = NULL;
     return head;
+}
+
+Enemy *createEnemy(const char name[MAX_NAME_LENGTH], int level, int attack,
+                   int defense, int hp, int stress) {
+    Enemy *champion = (Enemy *)malloc(sizeof(Enemy));
+    if (!champion)
+        return champion;
+    strncpy(champion->name, name, MAX_NAME_LENGTH - 1);
+    champion->name[MAX_NAME_LENGTH - 1] = '\0';
+    
+    champion->level = level;
+    champion->attack = attack;
+    champion->defense = defense;
+    champion->hp = hp;
+    champion->stress_attack = stress;
+    champion->next = NULL;
+
+    return champion;
+}
+
+int delete_enemy(Enemy **opponents, Enemy *target) {
+    if (!opponents || !target)
+        return 0;
+
+    Enemy *current = *opponents;
+    Enemy *prev = NULL;
+
+    for (; current; current = current->next) {
+        if (current == target) {
+            if (prev) {
+                prev->next = current->next;
+            } else {
+                *opponents = current->next;
+            }
+            current = NULL;
+            free(current);
+            return 1;
+        }
+        prev = current;
+    }
+    return 0;
 }
