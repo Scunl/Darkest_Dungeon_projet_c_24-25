@@ -14,7 +14,14 @@ int main(void) {
     int choice = 0;
 
     srand(time(NULL));
-
+    // Init Accessory
+    Accessory inventory[7] = {{"Pendentif tranchant", 5, 1, 0, 0, 0, 1},
+                              {"Calice de jeunesse", 0, 3, 5, 0, 5, 2},
+                              {"Couronne de Givre", 0, 2, 3, 2, 8, 3},
+                              {"Dague de l'Ombre", 7, 0, 0, 0, 3, 4},
+                              {"Bouclier d'Aegon", 0, 8, 0, 0, 0, 5},
+                              {"Bague de Feu", 3, 0, 0, 2, 10, 6},
+                              {"Cape des Sauvageons", 1, 4, 0, 0, 5, 7}};
     // Initialize classes
     Class classes[NBCLASS] = {
         {"Fury", 13, 0, 20, 5, 7},         {"Vestal", 3, 0, 20, 15, 3},
@@ -40,7 +47,7 @@ int main(void) {
     Character *selected_deck = NULL;
     Character *sanitarium = NULL;
     Character *fighting = NULL;
-    Accessory *inventory = NULL;
+    Character *taverne = NULL;
     Enemy *enemies = NULL;
 
     // Init every ennemies
@@ -114,12 +121,16 @@ int main(void) {
             break;
 
         case 2:
+            printf("\n     AVAILABLE (NOT PICKED)    ");
+            display_characters(available_characters);
             printf("\n     YOUR DECK    ");
             display_characters(selected_deck);
             printf("    SANITARIUM   ");
             display_characters(sanitarium);
             printf("    FIGHTERS   \n");
             display_characters(fighting);
+            printf("    TAVERNE   \n");
+            display_characters(taverne);
             break;
 
         case 3:
@@ -212,8 +223,30 @@ int main(void) {
             display_enemies(enemies);
             break;
 
+        case 11:
+            int nb_tav = count_characters(taverne);
+            int ydeck = count_characters(selected_deck);
+            if (ydeck == 0 || ydeck == 1)
+                printf("Cannot send your last or no one inside the Taverne\n");
+            else if (nb_tav < 2 && ydeck != 0) {
+                display_characters(selected_deck);
+                select_character(&selected_deck, ydeck, &taverne);
+                printf("Moved to the Taverne\n");
+            }
+            break;
+
+        case 12: {
+            int nb_tav = count_characters(taverne);
+            if (taverne) {
+                select_character(&taverne, nb_tav, &selected_deck);
+                printf("Moved from the Taverne to your deck");
+            }
+
+            break;
+        }
+
         default:
-            printf("Invalid choice. Please select 1-10.\n");
+            printf("Invalid choice. Please select 1-12.\n");
             break;
         }
         if (choice == 7 || choice == 1 || choice == 9) {
@@ -221,16 +254,20 @@ int main(void) {
             if (fighting)
                 enemy_attack_fighters(enemies, fighting, enemy_choice);
             round_number++;
-            regeneration_sanitarium(sanitarium);
+            if (sanitarium)
+                regeneration_sanitarium(sanitarium);
+            if (taverne)
+                regeneration_taverne(taverne);
         }
-
 
         if (selected_deck) {
             has_selection = 1;
         }
 
         // Check game ending conditions
-        if ((has_selection && !selected_deck && !fighting && (!available_characters)) || (!enemies) ) {
+        if ((has_selection && !selected_deck && !taverne && !fighting &&
+             (!available_characters)) ||
+            (!enemies)) {
             game_running = 0;
             printf("Game Over: No characters remaining.\n");
         }

@@ -167,7 +167,7 @@ void enemy_attack_fighters(Enemy *enemies, Character *fighters, int choice) {
                        opponent->current_hp);
             }
         }
-        
+
         break;
     }
     case 2: {
@@ -176,4 +176,14 @@ void enemy_attack_fighters(Enemy *enemies, Character *fighters, int choice) {
     default:
         break;
     }
+}
+
+void regeneration_taverne(Character *taverne) {
+    for (; taverne; taverne = taverne->next)
+        if (taverne->stress - 25 <= 0) {
+            taverne->stress = 0;
+            printf("%s has now 0 stress", taverne->name);
+        } else {
+            taverne->stress = taverne->stress - 25;
+        }
 }

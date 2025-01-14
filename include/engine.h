@@ -38,6 +38,6 @@ void regeneration_sanitarium(Character *sanitarium);
 int count_enemies(Enemy *list);
 
 void enemy_attack_fighters(Enemy *enemies, Character *fighters, int choice);
-
+void regeneration_taverne(Character *taverne);
 
 #endif /* ENGINE_H */

@@ -27,7 +27,7 @@ typedef struct {
     int hp_bonus;
     int restoration_bonus;
     int stress_reduction;
-    int accessory_count;
+    int price;
 } Accessory;
 
 typedef struct Character {

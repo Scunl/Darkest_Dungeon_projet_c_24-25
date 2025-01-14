@@ -67,7 +67,7 @@ void display_accessories(const Accessory *inventory) {
            "-------------"
            "--------------------\n");
 
-    for (int i = 0; i < inventory->accessory_count; i++) {
+    for (int i = 0; i < inventory->price; i++) {
         printf("%-25s %-10d %-10d %-10d %-15d %-10d\n", inventory[i].name,
                inventory[i].attack_bonus, inventory[i].defense_bonus,
                inventory[i].hp_bonus, inventory[i].restoration_bonus,
@@ -89,8 +89,10 @@ void display_menu(int round_number) {
     printf("8. Remove characters from arena\n");
     printf("9. Next round\n");
     printf("10. Show every enemies\n");
+    printf("11. Send characters to the Taverne\n");
+    printf("12. Move from Taverne to your deck\n");
     printf("====================================================\n");
-    printf("Enter your choice (1-10): ");
+    printf("Enter your choice (1-12): ");
 }
 
 
@@ -125,3 +127,21 @@ void display_fight_menu(Character champion) {
     printf("3. Restore your champion health with %dHP\n",
            champion.character_class.restoration);
 }
+
+// void display_accessories(const Accessory accessories[], int size) {
+//     printf("+------------------------+----------+----------+----------+----------+----------+\n");
+//     printf("| Nom                   | attbonus | defbonus | HPbonus  | restbonus| strred   |\n");
+//     printf("+------------------------+----------+----------+----------+----------+----------+\n");
+
+//     for (int i = 0; i < size; i++) {
+//         printf("| %-22s | %+8d | %+8d | %+8d | %+8d | %8d |\n",
+//                accessories[i].name,
+//                accessories[i].attack_bonus,
+//                accessories[i].defense_bonus,
+//                accessories[i].hp_bonus,
+//                accessories[i].restoration_bonus,
+//                accessories[i].stress_reduction);
+//     }
+
+//     printf("+------------------------+----------+----------+----------+----------+----------+\n");
+// }

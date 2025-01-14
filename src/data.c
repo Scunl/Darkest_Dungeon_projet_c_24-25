@@ -11,7 +11,7 @@ Accessory create_accessory(const char *name, int attack_bonus,
     accessory.hp_bonus = hp_bonus;
     accessory.restoration_bonus = restoration_bonus;
     accessory.stress_reduction = stress_reduction;
-    accessory.accessory_count = 0;
+    accessory.price = 0;
     return accessory;
 }
 

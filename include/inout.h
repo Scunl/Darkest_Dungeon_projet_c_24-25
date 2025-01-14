@@ -37,5 +37,4 @@ void display_character_status(const Character* character);
 void display_enemy_status(Enemy *enemy);
 void display_fight_menu(Character champion);
 
-
 #endif
