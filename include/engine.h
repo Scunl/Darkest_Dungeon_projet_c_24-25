@@ -33,4 +33,11 @@ void fighters_attack_enemy(Character *fighter, Enemy **opponents,
 int fight_character(Character *fighters, Enemy **enemis, Enemy *target,
                     int nbennemis);
 
+void regeneration_sanitarium(Character *sanitarium);
+
+int count_enemies(Enemy *list);
+
+void enemy_attack_fighters(Enemy *enemies, Character *fighters, int choice);
+
+
 #endif /* ENGINE_H */

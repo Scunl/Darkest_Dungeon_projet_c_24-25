@@ -109,7 +109,6 @@ int main(void) {
             display_characters(available_characters);
             if (select_character(&available_characters, selected_characters,
                                  &selected_deck)) {
-                round_number++;
                 selected_characters--;
             }
             break;
@@ -173,7 +172,7 @@ int main(void) {
                        "champion\n");
                 break;
             }
-            
+
             if (fighter_size < 3) {
                 display_characters(selected_deck);
                 if (select_character(&selected_deck, deck_size, &fighting)) {
@@ -191,7 +190,6 @@ int main(void) {
                 break;
             }
             fight_character(fighting, &enemies, enemies, 10);
-            round_number++;
             break;
 
         case 8:
@@ -207,25 +205,32 @@ int main(void) {
             break;
 
         case 9:
-            round_number++;
             printf("\nMoving to round %d...\n", round_number);
             break;
-        
+
         case 10:
             display_enemies(enemies);
             break;
 
         default:
-            printf("Invalid choice. Please select 1-5.\n");
+            printf("Invalid choice. Please select 1-10.\n");
             break;
         }
+        if (choice == 7 || choice == 1 || choice == 9) {
+            int enemy_choice = rand() % 3;
+            if (fighting)
+                enemy_attack_fighters(enemies, fighting, enemy_choice);
+            round_number++;
+            regeneration_sanitarium(sanitarium);
+        }
+
 
         if (selected_deck) {
             has_selection = 1;
         }
 
         // Check game ending conditions
-        if ((has_selection && !selected_deck && !fighting) || (!enemies)) {
+        if ((has_selection && !selected_deck && !fighting && (!available_characters)) || (!enemies) ) {
             game_running = 0;
             printf("Game Over: No characters remaining.\n");
         }
@@ -234,6 +239,5 @@ int main(void) {
             printf("Game Over: Maximum rounds (%d) reached.\n", round_number);
         }
     }
-
     return 0;
 }

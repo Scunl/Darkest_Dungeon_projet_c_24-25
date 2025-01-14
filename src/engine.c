@@ -111,8 +111,6 @@ int fight_character(Character *fighters, Enemy **enemis, Enemy *target,
             break;
         case 2:
             current->defending = 1;
-            printf("You are protect your champion with %d damage from the next "
-                   "enemies attack", current->character_class.defense);
             break;
         case 3:
             apply_healing(current, current->character_class.restoration);
@@ -124,4 +122,58 @@ int fight_character(Character *fighters, Enemy **enemis, Enemy *target,
     }
 
     return 1;
+}
+
+void regeneration_sanitarium(Character *sanitarium) {
+    for (; sanitarium; sanitarium = sanitarium->next) {
+        sanitarium->current_hp += 7;
+    }
+}
+
+int count_enemies(Enemy *list) {
+    int i;
+    for (i = 0; list; i++, list = list->next)
+        ;
+    return i;
+}
+
+void enemy_attack_fighters(Enemy *enemies, Character *fighters, int choice) {
+    int random_choice = rand() % count_characters(fighters);
+    Character *opponent = get_character_at_index(fighters, random_choice);
+    choice = 1;
+    switch (choice) {
+    case 1: {
+        if (opponent->defending) {
+            opponent->current_hp -=
+                enemies->attack - opponent->character_class.defense;
+            opponent->defending = 0;
+            printf(
+                "Your champion defended himself and protect %d HP from enemy "
+                "attack\n  Current HP : %d\n",
+                opponent->character_class.defense, opponent->current_hp);
+        } else {
+            opponent->current_hp -= enemies->attack;
+            if (opponent->current_hp <= 0) {
+                opponent->current_hp = 0;
+                printf("%s has been slain by %s !\n", opponent->name,
+                       enemies->name);
+                remove_character(&opponent, opponent);
+                opponent = NULL;
+            } else {
+                printf("You champion %s have been attacked by %s. You have "
+                       "lost %d "
+                       "HP\n  Current HP : %d",
+                       fighters->name, enemies->name, enemies->attack,
+                       opponent->current_hp);
+            }
+        }
+        
+        break;
+    }
+    case 2: {
+    }
+
+    default:
+        break;
+    }
 }
